@@ -3,10 +3,10 @@ import random
 import os
 
 # global variables
-tiles_number = 25
+tiles_number = 25  # multiple of 5
 die_faces = 3
-QUESTIONS_PERCENTAGE = 40
-DANGERS_PERCENTAGE = 30
+QUESTIONS_PERCENTAGE = 50
+DANGERS_PERCENTAGE = 25
 
 
 def main() -> None:
@@ -30,7 +30,9 @@ def menu() -> None:
 
 def start_game():
     """Start game"""
-    pass
+    global board
+    board = build_board()
+    print_board()
 
 
 def customize() -> None:
@@ -40,19 +42,59 @@ def customize() -> None:
     while True:
         try:
             user_choice = int(input())
-            break
+            if user_choice % 5 == 0:
+                break
         except ValueError:
             pass
+
     tiles_number = user_choice
+
 
 def build_board() -> list[str]:
     """Build board initial board"""
-    pass
+    board = []
+
+    # create empty board
+    for i in range(tiles_number):
+        board.append(" - ")
+
+    # calculate the number of questions and dangers
+    number_of_questions = int(tiles_number * QUESTIONS_PERCENTAGE / 100)
+    number_of_dangers = int(tiles_number * DANGERS_PERCENTAGE / 100)
+
+    # create a list of all the positions except the first and the last
+    positions = [i for i in range(1, tiles_number - 1)]
+
+    # replace random tiles with questions
+    for _ in range(number_of_questions):
+        position = random.choice(positions)
+        board[position] = " ? "
+        positions.remove(position)
+
+    # replace random tiles with dangers
+    for _ in range(number_of_dangers):
+        position = random.choice(positions)
+        board[position] = " ! "
+        positions.remove(position)
+
+    # add start and end tiles
+    board[0] = " # "
+    board[-1] = " @ "
+
+    return board
+
+
+def print_board() -> None:
+    """Print the board"""
+    global board
+    for i in range(0, len(board), 5):
+        print("".join(board[i:i + 5]))
+
 
 def roll_dice() -> int:
     """Rolls dice"""
-    pass
-
+    number = random.randint(1, die_faces)
+    return number
 
 
 # start here
