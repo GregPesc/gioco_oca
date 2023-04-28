@@ -1,4 +1,3 @@
-import json
 import random
 import os
 
@@ -16,19 +15,17 @@ def menu() -> None:
     # default tiles number
     tiles_number = 25
 
-    while True:
+    user_choice = None
+    while user_choice not in ("1", "2", "3"):
         clear_screen()
         print("1 - Gioca\n2 - Personalizza\n3 - Esci")
-
-        user_choice = None
-        while user_choice not in ("1", "2", "3"):
-            user_choice = input()
-            if user_choice == "1":
-                start_game(tiles_number)
-            elif user_choice == "2":
-                tiles_number = customize()
-            elif user_choice == "3":
-                exit()
+        user_choice = input()
+        if user_choice == "1":
+            start_game(tiles_number)
+        elif user_choice == "2":
+            tiles_number = customize()
+        elif user_choice == "3":
+            exit()
 
 
 def customize() -> int:
@@ -48,16 +45,6 @@ def customize() -> int:
     return user_choice
 
 
-def roll_dice() -> int:
-    """Roll dice."""
-
-    # default die faces
-    die_faces = 3
-
-    number = random.randint(1, die_faces)
-    return number
-
-
 def clear_screen() -> None:
     """Clear screen."""
     os.system("cls" if os.name == "nt" else "clear")
@@ -71,9 +58,9 @@ def start_game(tiles_number: int) -> None:
     # temp
     clear_screen()
     print(board)
-    board.set_player_position(4)
-    print(board)
-    board.set_player_position(0)
+    input("Premi invio per continuare...")
+    board.handle_question()
+    input("Premi invio per continuare...")
     print(board)
     input("Premi invio per continuare...")
     # end temp

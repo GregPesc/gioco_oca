@@ -1,0 +1,37 @@
+{
+    "Example question0": [
+        "Option 1",
+        "Option 2",
+        "Option 3",
+        "Option 4",
+        "1"
+    ],
+    "Example question1": [
+        "Option 1",
+        "Option 2",
+        "Option 3",
+        "Option 4",
+        "2"
+    ],
+    "Example question2": [
+        "Option 1",
+        "Option 2",
+        "Option 3",
+        "Option 4",
+        "3"
+    ],
+    "Example question3": [
+        "Option 1",
+        "Option 2",
+        "Option 3",
+        "Option 4",
+        "4"
+    ],
+    "Example question4": [
+        "Option 1",
+        "Option 2",
+        "Option 3",
+        "Option 4",
+        "5"
+    ]
+}
