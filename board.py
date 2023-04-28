@@ -1,4 +1,5 @@
 import random
+import copy
 
 
 class Board:
@@ -6,10 +7,14 @@ class Board:
 
     QUESTIONS_PERCENTAGE = 50
     DANGERS_PERCENTAGE = 25
+    PLAYER_ICON = "@"
+    player_position = 0
 
     def __init__(self, tiles_number: int) -> None:
         self.tiles_number = tiles_number
-        self.board = self.build_board()
+        self.initial_board = self.build_board()
+        self.board = copy.deepcopy(self.initial_board)
+        self.board[0] = f" {self.PLAYER_ICON} "
 
     def build_board(self) -> list[str]:
         """Build initial board."""
@@ -41,12 +46,25 @@ class Board:
             positions.remove(position)
 
         # add start and end tiles
-        board[0] = " # "
-        board[-1] = " @ "
+        board[0] = " < "
+        board[-1] = " > "
 
         return board
 
-    def print_board(self) -> None:
-        """Print the board"""
+    def __str__(self) -> str:
+        """Print board."""
+        board_string = ""
         for i in range(0, len(self.board), 5):
-            print("".join(self.board[i:i + 5]))
+            board_string += "".join(self.board[i:i + 5])
+            board_string += "\n"
+
+        return board_string
+
+    def set_player_position(self, move_to_position: int) -> None:
+        """Set player position."""
+        # remove player icon from current position and replace it with original tile
+        self.board[self.player_position] = self.initial_board[self.player_position]
+        # set player position to new position
+        self.player_position = move_to_position
+        # replace new position with player icon
+        self.board[self.player_position] = f" {self.PLAYER_ICON} "
