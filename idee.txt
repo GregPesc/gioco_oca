@@ -1,0 +1,17 @@
+# ? - ?[x, A] !
+? ? ? ? ?
+? ! - ? ?
+? - ? ? ?
+? ! - ! @
+
+? = domanda scelta multipla / v o f, rispondi bene = tiri dado avanti, rispondi male = tiri dado indietro
+! = imprevisto (numero casuale di caselle avanti o indietro)
+- = niente
+@ = fine
+# = inizio
+
+personalizzazione tavolo da gioco
+- numero caselle
+- domande 40%
+- imprevisti 20%
+- 40% vuote
