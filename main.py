@@ -1,4 +1,3 @@
-import random
 import os
 
 from board import Board
@@ -59,8 +58,10 @@ def start_game(tiles_number: int) -> None:
     clear_screen()
     print(board)
     input("Premi invio per continuare...")
-    board.handle_question()
+    board.set_player_position(30)
+    print(board)
     input("Premi invio per continuare...")
+    board.set_player_position(-5)
     print(board)
     input("Premi invio per continuare...")
     # end temp

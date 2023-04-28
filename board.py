@@ -83,6 +83,15 @@ class Board:
 
     def set_player_position(self, move_to_position: int) -> None:
         """Set player position."""
+
+        # check if the player is trying to move out of the board
+        if move_to_position < 0:
+            self.set_player_position(0)
+            return
+        elif move_to_position > self.tiles_number - 1:
+            self.set_player_position(self.tiles_number - 1)
+            return
+
         # remove player icon from current position and replace it with original tile
         self.board[self.player_position] = self.initial_board[self.player_position]
         # set player position to new position
