@@ -11,17 +11,19 @@ class Board:
     DANGERS_PERCENTAGE = 25
     PLAYER_ICON = "@"
     player_position = 0
-    die_faces = 3
+    die_faces = 6
 
     def __init__(self, tiles_number: int) -> None:
         self.tiles_number = tiles_number
         self.initial_board = self.build_board()
         self.board = copy.deepcopy(self.initial_board)
         self.board[0] = f" {self.PLAYER_ICON} "
-        self.questions = self.load_questions()
+        self.load_questions()
+        self.game_finished = False
 
     def __str__(self) -> str:
         """Print board."""
+
         board_string = ""
         for i in range(0, len(self.board), 5):
             board_string += "".join(self.board[i:i + 5])
@@ -29,18 +31,19 @@ class Board:
 
         return board_string
 
-    def load_questions(self) -> dict:
+    def load_questions(self) -> None:
         """Load questions from file."""
+
         with open("domande_e_risposte.json", "r") as file:
             questions = json.load(file)
 
-        return questions
+        self.questions = questions
 
     def build_board(self) -> list[str]:
         """Build initial board."""
-        board = []
 
         # create empty board
+        board = []
         for _ in range(self.tiles_number):
             board.append(" - ")
 
@@ -79,6 +82,7 @@ class Board:
 
     def clear_screen(self) -> None:
         """Clear screen."""
+
         os.system("cls" if os.name == "nt" else "clear")
 
     def set_player_position(self, move_to_position: int) -> None:
@@ -101,15 +105,16 @@ class Board:
 
     def handle_tile(self) -> None:
         """Handle tile."""
-        tile = self.board[self.player_position]
+
+        tile = self.initial_board[self.player_position]
         if tile == " ? ":
             self.handle_question()
         elif tile == " ! ":
             self.handle_danger()
         elif tile == " - ":
-            pass
+            self.handle_empty()
         elif tile == " < ":
-            pass
+            self.handle_start()
         elif tile == " > ":
             self.handle_end()
         else:
@@ -117,39 +122,90 @@ class Board:
 
     def handle_question(self) -> None:
         """Handle question."""
+
         question, options = self.get_random_question()
+        # get the correct answer from the options (index 4) and remove it from the list
         correct_answer = options.pop(4)
+
+        # print question and options
         self.clear_screen()
         print(f"Domanda: {question}")
         for i, option in enumerate(options):
             print(f"{i + 1} - {option}")
+
+        # get user choice
         while True:
             user_choice = input()
             if user_choice in ("1", "2", "3", "4"):
                 break
+
+        # check if the user choice is correct and handle it
         self.clear_screen()
         if user_choice == correct_answer:
             print("Risposta corretta!")
-            print("Premi invio per tirare il dado e muoverti avanti.")
+            input("Premi invio per lanciare il dado e muoverti avanti...")
             number = self.roll_dice()
             print(f"Hai tirato {number}!")
+            print("Premi invio per continuare...")
+            input()
             self.set_player_position(self.player_position + number)
         else:
             print("Risposta sbagliata!")
-            print("Premi invio per tirare il dado e muoverti indietro.")
+            input("Premi invio per lanciare il dado e muoverti indietro...")
             number = self.roll_dice()
             print(f"Hai tirato {number}!")
+            print("Premi invio per continuare...")
+            input()
             self.set_player_position(self.player_position - number)
 
     def get_random_question(self) -> tuple[str, list[str]]:
         """Get random question."""
+
         question, options = random.choice(list(self.questions.items()))
         return question, options
 
     def handle_danger(self) -> None:
         """Handle danger."""
-        raise NotImplementedError
+
+        self.clear_screen()
+        print("Sei caduto su una casella pericolo!")
+        print("Premi invio per lanciare il dado e muoverti indietro...")
+        input()
+        number = self.roll_dice()
+        print(f"Hai tirato {number}!")
+        print("Premi invio per continuare...")
+        input()
+        self.set_player_position(self.player_position - number)
+
+    def handle_empty(self) -> None:
+        """Handle empty."""
+
+        self.clear_screen()
+        print("Sei caduto su una casella vuota!")
+        input("Premi invio per lanciare il dado e muoverti avanti...")
+        number = self.roll_dice()
+        print(f"Hai tirato {number}!")
+        print("Premi invio per continuare...")
+        input()
+        self.set_player_position(self.player_position + number)
+
+    def handle_start(self) -> None:
+        """Handle start."""
+
+        print("Premi invio per lanciare il dado e muoverti avanti...")
+        input()
+        self.clear_screen()
+        number = self.roll_dice()
+        print(f"Hai tirato {number}!")
+        print("Premi invio per continuare...")
+        input()
+        self.set_player_position(self.player_position + number)
 
     def handle_end(self) -> None:
         """Handle end."""
-        raise NotImplementedError
+
+        self.clear_screen()
+        print("Hai vinto!")
+        print("Grazie per aver giocato!")
+        input("Premi invio per tornare al menù...")
+        self.game_finished = True
